@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nanovla"
+version = "0.1.0"
+description = "NanoVLA project."
+readme = "README.md"
+requires-python = ">=3.14.6"
+dependencies = [
+    "pygame-ce>=2.5.8",
+]
+
+[dependency-groups]
+dev = [
+  "flake8>=7.3.0",
+  "pytest>=8.0",
+  "ruff>=0.6",
+]
+
+[tool.uv]
+package = true
