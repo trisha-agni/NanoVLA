@@ -1,10 +1,10 @@
 # external imports
 import pygame
 # internal imports
+from robot_position import RobotPosition, GRID_SZ
 
 # define window dimensions
 WINDOW_SZ = 400
-GRID_SZ = 10
 CELL_SZ = WINDOW_SZ // GRID_SZ
 
 # colors
@@ -14,18 +14,48 @@ COLOR_ROBOT = (50, 200, 50)       # green
 COLOR_TARGET = (250, 50, 50)      # red
 COLOR_OBSTACLE = (100, 100, 100)  # dark grey wallss
 
+# discretized action space mapping for NanoVLA
+ACTION_SPACE = {
+    pygame.K_UP:    {"id": 0, "text": "move_up"},
+    pygame.K_DOWN:  {"id": 1, "text": "move_down"},
+    pygame.K_LEFT:  {"id": 2, "text": "move_left"},
+    pygame.K_RIGHT: {"id": 3, "text": "move_right"},
+}
+
 
 class NanoVLASimulator:
     def __init__(self):
         """Initialize game state and environment layout."""
-        self.robot_pos = [0, 0]
-        self.target_pos = [9, 9]
-        self.obstacles = [[3, 3], [3, 4], [3, 5], [6, 4], [6, 5], [6, 6]]
+        self.robot_pos = RobotPosition(0, 0)
+        self.target_pos = RobotPosition(9, 9)
+        self.obstacles = [
+            RobotPosition(3, 3),
+            RobotPosition(3, 4),
+            RobotPosition(3, 5),
+            RobotPosition(6, 4),
+            RobotPosition(6, 5),
+            RobotPosition(6, 6)
+        ]
 
     def draw(self, screen):
         self._draw_grid(screen)
         self._draw_env(screen)
         self._draw_robot(screen)
+
+    def update(self, key_event):
+        """Processes events blindly without knowing anything about key maps or deltas."""
+        # ask our smart vector to evaluate the raw keyboard event key
+        next_pos = self.robot_pos.get_next(key_event)
+
+        # check if the resulting target spot hits a barrier wall
+        if not next_pos.is_valid(self.obstacles):
+            return None
+
+        # success: Commit movement tracking state
+        self.robot_pos = next_pos
+
+        # return the parsed meta metadata packet back up to our data loop logger
+        return RobotPosition.parse_action(key_event)
 
     def _draw_grid(self, screen):
         """Clear screen and overlay the 10x10 matrix map lines."""
