@@ -2,7 +2,7 @@
 import sys
 import pygame
 # internal imports
-from environment import NanoVLASimulator, WINDOW_SZ
+from nano_vla.environment import NanoVLASimulator, WINDOW_SZ
 
 
 def main():

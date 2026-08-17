@@ -11,3 +11,4 @@ uv run python -c "import nanovla; print(nanovla.__version__)"
 
 # flake8 generate_nanovla_dataset.py
 # uv run python generate_nanovla_dataset.py
+# uv run python -m nano_vla.generate_nanovla_dataset

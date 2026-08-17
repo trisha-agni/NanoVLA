@@ -1,7 +1,7 @@
 # external imports
 import pygame
 # internal imports
-from robot_position import RobotPosition, GRID_SZ
+from nano_vla.robot_position import RobotPosition, GRID_SZ
 
 # define window dimensions
 WINDOW_SZ = 400

@@ -9,7 +9,10 @@ description = "NanoVLA project."
 readme = "README.md"
 requires-python = ">=3.14.6"
 dependencies = [
-    "pygame-ce>=2.5.8",
+  "torch",
+  "torchvision",
+  "transformers",
+  "pygame-ce>=2.5.8",
 ]
 
 [dependency-groups]
