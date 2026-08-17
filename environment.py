@@ -14,14 +14,6 @@ COLOR_ROBOT = (50, 200, 50)       # green
 COLOR_TARGET = (250, 50, 50)      # red
 COLOR_OBSTACLE = (100, 100, 100)  # dark grey wallss
 
-# discretized action space mapping for NanoVLA
-ACTION_SPACE = {
-    pygame.K_UP:    {"id": 0, "text": "move_up"},
-    pygame.K_DOWN:  {"id": 1, "text": "move_down"},
-    pygame.K_LEFT:  {"id": 2, "text": "move_left"},
-    pygame.K_RIGHT: {"id": 3, "text": "move_right"},
-}
-
 
 class NanoVLASimulator:
     def __init__(self):
@@ -79,8 +71,8 @@ class NanoVLASimulator:
     def _draw_target(self, screen):
         """Render static target."""
         rect = pygame.Rect(
-            self.target_pos[0] * CELL_SZ,
-            self.target_pos[1] * CELL_SZ,
+            self.target_pos.x * CELL_SZ,
+            self.target_pos.y * CELL_SZ,
             CELL_SZ,
             CELL_SZ
         )
@@ -91,8 +83,8 @@ class NanoVLASimulator:
         for obs in self.obstacles:
             # multiply matrix coordinates by CELL_SZ to get screen pos
             rect = pygame.Rect(
-                obs[0] * CELL_SZ,
-                obs[1] * CELL_SZ,
+                obs.x * CELL_SZ,
+                obs.y * CELL_SZ,
                 CELL_SZ,
                 CELL_SZ
             )
@@ -100,8 +92,8 @@ class NanoVLASimulator:
 
     def _draw_robot(self, screen):
         """Handles detailed rendering for the stylized robot agent."""
-        rx = self.robot_pos[0] * CELL_SZ
-        ry = self.robot_pos[1] * CELL_SZ
+        rx = self.robot_pos.x * CELL_SZ
+        ry = self.robot_pos.y * CELL_SZ
 
         # metal body
         robot_rect = pygame.Rect(rx + 4, ry + 8, CELL_SZ - 8, CELL_SZ - 12)

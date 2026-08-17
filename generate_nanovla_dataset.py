@@ -21,8 +21,20 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                else:
+                    # pass the key down event to the simulator
+                    action = sim.update(event.key)
+                    if action:
+                        print(
+                            f"action verified: {action['text']} "
+                            f"(Token ID: {action['id']})"
+                        )
+        # render frame refresh
         sim.draw(screen)
-        pygame.display.flip()  # refresh screen
+        pygame.display.flip()
         # clean up and exit smoothly when running is False
     pygame.quit()
     sys.exit()

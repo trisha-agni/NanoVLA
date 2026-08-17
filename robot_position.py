@@ -2,10 +2,9 @@
 import pygame
 # internal imports
 
-
 GRID_SZ = 10
 
-# single source of truth
+# discretized action space mapping for NanoVLA
 ACTION_SPACE = {
     pygame.K_UP:    {"id": 0, "text": "move_up",    "delta": (0, -1)},
     pygame.K_DOWN:  {"id": 1, "text": "move_down",  "delta": (0, 1)},
