@@ -7,8 +7,8 @@ import json
 import os
 import torch
 # internal imports
+from nano_vla.config import DEFAULT_MODEL_ID, MANIFEST_PATH
 
-DATASET_DIR = "nanovla_dataset"
 MANIFEST_JSON_NAME = "manifest.json"
 MAX_TOKEN_LENGTH = 32
 STD_IMAGENT_SCALING = {
@@ -19,19 +19,17 @@ VISION_ENCODER_RES = (224, 224)  # standard input resolution for typical vision 
 
 
 class NanoVLADataset(Dataset):
-    def __init__(self, dataset_dir=DATASET_DIR, model_id="gpt2"):
+    def __init__(self, model_id=DEFAULT_MODEL_ID):
         """Loads the manifest metadata and prepares the vision/language processors."""
-        self.dataset_dir = dataset_dir
-        self.manifest_path = os.path.join(dataset_dir, MANIFEST_JSON_NAME)
         self.samples = self._load_manifest()
         self.tokenizer = self._create_tokenizer(model_id)
         self.img_transform = self._create_vision_transformer()
 
     def _load_manifest(self):
         """Load the generated recording logs."""
-        if not os.path.exists(self.manifest_path):
-            raise FileNotFoundError(f"No manifest.json at {self.manifest_path}")
-        with open(self.manifest_path, "r") as f:
+        if not os.path.exists(MANIFEST_PATH):
+            raise FileNotFoundError(f"No manifest.json at {MANIFEST_PATH}")
+        with open(MANIFEST_PATH, "r") as f:
             return json.loads(f)
 
     def _create_tokenizer(self):

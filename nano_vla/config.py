@@ -1,0 +1,14 @@
+import os
+
+# --- FILE SYSTEM PATHS ---
+DATASET_DIR = "../nanovla_dataset"
+MANIFEST_FILE = "manifest.json"
+MANIFEST_PATH = os.path.join(DATASET_DIR, MANIFEST_FILE)
+
+# --- ENVIRONMENT PARAMETERS ---
+GRID_SZ = 10
+WINDOW_SZ = 400
+
+# --- ML BACKBONE SETTINGS ---
+DEFAULT_MODEL_ID = "gpt2"
+MAX_TEXT_LENGTH = 32

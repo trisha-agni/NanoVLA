@@ -1,8 +1,8 @@
 # external imports
 import pygame
 # internal imports
+from nano_vla.config import GRID_SZ
 
-GRID_SZ = 10
 
 # discretized action space mapping for NanoVLA
 ACTION_SPACE = {

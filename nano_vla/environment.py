@@ -1,10 +1,10 @@
 # external imports
 import pygame
 # internal imports
-from nano_vla.robot_position import RobotPosition, GRID_SZ
+from nano_vla.config import WINDOW_SZ, GRID_SZ
+from nano_vla.robot_position import RobotPosition
 
 # define window dimensions
-WINDOW_SZ = 400
 CELL_SZ = WINDOW_SZ // GRID_SZ
 
 # colors
