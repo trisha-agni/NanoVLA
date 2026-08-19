@@ -4,7 +4,7 @@ import os
 import sys
 import pygame
 # internal imports
-from nano_vla.config import DATASET_DIR, MANIFEST_PATH, WINDOW_SZ
+from nano_vla.config import DATASET_DIR, MANIFEST_PATH, WINDOW_SZ, IMAGES_DIR
 from nano_vla.environment import NanoVLASimulator
 
 LANGUAGE_INSTRUCTION = "Navigate to the red target box avoiding obstacles"
@@ -14,8 +14,11 @@ def save_dataset_step(screen, step_num, action_data, robot_pos):
     """Captures the current screen pixels and updates the manifest log."""
     # save the visual frame matrix as a png image file
     img_filename = f'frame_{step_num:05d}.png'
-    img_path = os.path.join(DATASET_DIR, 'images', img_filename)
-    os.makedirs(os.path.dirname(img_path), exist_ok=True)
+    img_path = os.path.join(IMAGES_DIR, img_filename)
+    os.makedirs(DATASET_DIR, exist_ok=True)
+    os.makedirs(IMAGES_DIR, exist_ok=True)
+    assert os.path.exists(DATASET_DIR)
+    assert os.path.exists(IMAGES_DIR)
     pygame.image.save(screen, img_path)
 
     # structure the multimodal training sample metadata

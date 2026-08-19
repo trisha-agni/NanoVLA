@@ -1,8 +1,11 @@
+from pathlib import Path
 import os
 
 # --- FILE SYSTEM PATHS ---
-DATASET_DIR = "../nanovla_dataset"
-MANIFEST_FILE = "manifest.json"
+ROOT = Path(__file__).resolve().parents[1]
+DATASET_DIR = ROOT / 'nanovla_dataset'
+IMAGES_DIR = DATASET_DIR / 'images'
+MANIFEST_FILE = 'manifest.json'
 MANIFEST_PATH = os.path.join(DATASET_DIR, MANIFEST_FILE)
 
 # --- ENVIRONMENT PARAMETERS ---
