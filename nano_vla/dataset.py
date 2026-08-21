@@ -60,6 +60,7 @@ def save_dataset_step(screen, step_num, action_data, robot_pos):
 class NanoVLADataset(Dataset):
     def __init__(self, model_id=DEFAULT_MODEL_ID):
         """Loads the manifest metadata and prepares the vision/language processors."""
+        self.model_id = model_id
         self.samples = self._load_manifest()
         self.tokenizer = self._create_tokenizer(model_id)
         self.img_transform = self._create_vision_transformer()
@@ -69,14 +70,14 @@ class NanoVLADataset(Dataset):
         if not os.path.exists(MANIFEST_PATH):
             raise FileNotFoundError(f"No manifest.json at {MANIFEST_PATH}")
         with open(MANIFEST_PATH, "r") as f:
-            return json.loads(f)
+            return json.load(f)
 
-    def _create_tokenizer(self):
+    def _create_tokenizer(self, model_id):
         """
         Set up the text tokenizer
         (using lightweight gpt-2 as a proxy backbone).
         """
-        tok = AutoTokenizer.from_pretrained(self.model_id)
+        tok = AutoTokenizer.from_pretrained(model_id)
         if tok.pad_token is None:
             tok.pad_token = tok.eos_token
         return tok
