@@ -1,50 +1,10 @@
 # external imports
-import json
-import os
 import sys
 import pygame
 # internal imports
-from nano_vla.config import DATASET_DIR, MANIFEST_PATH, WINDOW_SZ, IMAGES_DIR
+from nano_vla.config import WINDOW_SZ
+from nano_vla.dataset import save_dataset_step
 from nano_vla.environment import NanoVLASimulator
-
-LANGUAGE_INSTRUCTION = "Navigate to the red target box avoiding obstacles"
-
-
-def save_dataset_step(screen, step_num, action_data, robot_pos):
-    """Captures the current screen pixels and updates the manifest log."""
-    # save the visual frame matrix as a png image file
-    img_filename = f'frame_{step_num:05d}.png'
-    img_path = os.path.join(IMAGES_DIR, img_filename)
-    os.makedirs(DATASET_DIR, exist_ok=True)
-    os.makedirs(IMAGES_DIR, exist_ok=True)
-    assert os.path.exists(DATASET_DIR)
-    assert os.path.exists(IMAGES_DIR)
-    pygame.image.save(screen, img_path)
-
-    # structure the multimodal training sample metadata
-    log_entry = {
-        'step': step_num,
-        'image_path': img_path,
-        'instruction': LANGUAGE_INSTRUCTION,
-        'robot_state': list(robot_pos.to_tuple()),
-        'action_token_id': action_data['id'],
-        'action_token_text': action_data['text'],
-    }
-
-    logs = []
-    # read the existing logs array or initialize a clean one
-    if os.path.exists(MANIFEST_PATH):
-        with open(MANIFEST_PATH, 'r') as f:
-            try:
-                logs = json.load(f)
-            except json.JSONDecodeError:
-                logs = []
-    logs.append(log_entry)
-
-    with open(MANIFEST_PATH, 'w') as f:
-        json.dump(logs, f, indent=4)
-
-    print(f'recorded step {step_num:04d} | action taken: {action_data['text']}')
 
 
 def main():
