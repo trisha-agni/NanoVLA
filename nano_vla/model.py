@@ -31,7 +31,19 @@ class NanoVLAModel(nn.Module):
             Sequence construction:
             [Vision Tokens] + [Text Instruction Tokens] -> Predict Action Token
             """
-            batch_sz = pixel_values.shape[0]
+            vision_outputs = self.vision_encoder(pixel_values=pixel_values)
+            vision_features = vision_outputs.last_hidden_state
+
+            projected_vision_embd = self.projector(vision_features)
+            text_embd = self.lang_model.transformer.wte(input_ids)
+            multimodal_embd = torch.cat((projected_vision_embd, text_embd), dim=1)
+
+            outputs = self.lang_model(inputs_embeds=multimodal_embd,
+                                      attention_mask=attention_mask)
+            logits = outputs.logits
+
+            action_logits = logits[:, -1, :]
+            return action_logits
 
     def _create_lang_model(self):
         """
