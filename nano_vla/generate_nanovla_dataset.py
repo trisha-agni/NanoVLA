@@ -3,7 +3,7 @@ import sys
 import pygame
 # internal imports
 from nano_vla.config import WINDOW_SZ
-from nano_vla.dataset import save_dataset_step
+from nano_vla.dataset import save_dataset_step, get_next_step_index
 from nano_vla.environment import NanoVLASimulator
 
 
@@ -17,6 +17,10 @@ def main():
     sim = NanoVLASimulator()
     step_counter = 0
     clock = pygame.time.Clock()
+    step_counter = get_next_step_index()
+    if step_counter > 0:
+        print('found existing dataset! '
+              f'resuming collection from step {step_counter}')
 
     # core game loop
     running = True

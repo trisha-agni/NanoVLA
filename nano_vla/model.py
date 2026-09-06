@@ -1,5 +1,5 @@
 # external imports
-from transformers import AutoModel, AutoModelForCasualLM
+from transformers import AutoModel, AutoModelForCausalLM
 import torch
 import torch.nn as nn
 # internal imports
@@ -25,32 +25,32 @@ class NanoVLAModel(nn.Module):
             nn.Linear(self.lm_hidden_dim, self.lm_hidden_dim)
         )
 
-        def forward(self, pixel_values, input_ids, attention_mask=None):
-            """
-            Executes a single forward multimodal training pass.
-            Sequence construction:
-            [Vision Tokens] + [Text Instruction Tokens] -> Predict Action Token
-            """
-            vision_outputs = self.vision_encoder(pixel_values=pixel_values)
-            vision_features = vision_outputs.last_hidden_state
+    def forward(self, pixel_values, input_ids, attention_mask=None):
+        """
+        Executes a single forward multimodal training pass.
+        Sequence construction:
+        [Vision Tokens] + [Text Instruction Tokens] -> Predict Action Token
+        """
+        vision_outputs = self.vision_encoder(pixel_values=pixel_values)
+        vision_features = vision_outputs.last_hidden_state
 
-            projected_vision_embd = self.projector(vision_features)
-            text_embd = self.lang_model.transformer.wte(input_ids)
-            multimodal_embd = torch.cat((projected_vision_embd, text_embd), dim=1)
+        projected_vision_embd = self.projector(vision_features)
+        text_embd = self.language_model.transformer.wte(input_ids)
+        multimodal_embd = torch.cat((projected_vision_embd, text_embd), dim=1)
 
-            outputs = self.lang_model(inputs_embeds=multimodal_embd,
+        outputs = self.language_model(inputs_embeds=multimodal_embd,
                                       attention_mask=attention_mask)
-            logits = outputs.logits
+        logits = outputs.logits
 
-            action_logits = logits[:, -1, :]
-            return action_logits
+        action_logits = logits[:, -1, :]
+        return action_logits
 
     def _create_lang_model(self):
         """
         Create language model (the brain).
         By default, we use standard causal GPT-2.
         """
-        obj = AutoModelForCasualLM.from_pretrained(DEFAULT_MODEL_ID)
+        obj = AutoModelForCausalLM.from_pretrained(DEFAULT_MODEL_ID)
         # gpt-2 hidden size is usually 768
         return obj, obj.config.n_embd
 

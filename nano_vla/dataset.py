@@ -9,7 +9,6 @@ import torch
 # internal imports
 from nano_vla.config import DATASET_DIR, MANIFEST_PATH, IMAGES_DIR, DEFAULT_MODEL_ID
 
-
 LANGUAGE_INSTRUCTION = "Navigate to the red target box avoiding obstacles"
 MAX_TOKEN_LENGTH = 32
 STD_IMAGENT_SCALING = {
@@ -18,6 +17,16 @@ STD_IMAGENT_SCALING = {
 }
 VISION_ENCODER_RES = (224, 224)  # standard input resolution for typical vision encoder
 
+
+def get_next_step_index():
+    if os.path.exists(MANIFEST_PATH):
+        with open(MANIFEST_PATH, 'r') as f:
+            try:
+                hist_logs = json.load(f)
+                return  len(hist_logs)
+            except json.JSONDecodeError:
+                return 0
+    return 0
 
 def save_dataset_step(screen, step_num, action_data, robot_pos):
     """Captures the current screen pixels and updates the manifest log."""
