@@ -11,7 +11,7 @@ from nano_vla.config import DATASET_DIR, MANIFEST_PATH, IMAGES_DIR, DEFAULT_MODE
 
 LANGUAGE_INSTRUCTION = "Navigate to the red target box avoiding obstacles"
 MAX_TOKEN_LENGTH = 32
-STD_IMAGENT_SCALING = {
+STD_IMAGENET_SCALING = {
     'mean': [0.485, 0.456, 0.406],
     'std': [0.229, 0.224, 0.225]
 }
@@ -67,12 +67,11 @@ def save_dataset_step(screen, step_num, action_data, robot_pos):
 
 
 class NanoVLADataset(Dataset):
-    def __init__(self, model_id=DEFAULT_MODEL_ID):
+    def __init__(self):
         """Loads the manifest metadata and prepares the vision/language processors."""
-        self.model_id = model_id
         self.samples = self._load_manifest()
-        self.tokenizer = self._create_tokenizer(model_id)
-        self.img_transform = self._create_vision_transformer()
+        self.tokenizer = self.create_tokenizer()
+        self.img_transform = self.create_vision_transformer()
 
     def _load_manifest(self):
         """Load the generated recording logs."""
@@ -81,17 +80,18 @@ class NanoVLADataset(Dataset):
         with open(MANIFEST_PATH, "r") as f:
             return json.load(f)
 
-    def _create_tokenizer(self, model_id):
+    @staticmethod
+    def create_tokenizer():
         """
         Set up the text tokenizer
         (using lightweight gpt-2 as a proxy backbone).
         """
-        tok = AutoTokenizer.from_pretrained(model_id)
+        tok = AutoTokenizer.from_pretrained(DEFAULT_MODEL_ID)
         if tok.pad_token is None:
             tok.pad_token = tok.eos_token
         return tok
-
-    def _create_vision_transformer(self):
+    @staticmethod
+    def create_vision_transformer():
         """
         Set up the vision transformers
         (converts PNGs to standardized torch float matrices).
@@ -100,8 +100,8 @@ class NanoVLADataset(Dataset):
             transforms.Resize(VISION_ENCODER_RES),
             transforms.ToTensor(),  # scales pixel values from [0, 255] to [0.0, 1.0]
             transforms.Normalize(
-                STD_IMAGENT_SCALING['mean'],
-                STD_IMAGENT_SCALING['std']
+                STD_IMAGENET_SCALING['mean'],
+                STD_IMAGENET_SCALING['std']
             )
         ])
 
