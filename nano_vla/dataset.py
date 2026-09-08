@@ -7,7 +7,7 @@ import json
 import os
 import torch
 # internal imports
-from nano_vla.config import DATASET_DIR, MANIFEST_PATH, IMAGES_DIR, DEFAULT_MODEL_ID
+from nano_vla.config import ACTIVE_DATA_DIR, MANIFEST_PATH, IMAGES_DIR, DEFAULT_MODEL_ID
 
 LANGUAGE_INSTRUCTION = "Navigate to the red target box avoiding obstacles"
 MAX_TOKEN_LENGTH = 32
@@ -34,9 +34,9 @@ def save_dataset_step(screen, step_num, action_data, robot_pos):
     # save the visual frame matrix as a png image file
     img_filename = f'frame_{step_num:05d}.png'
     img_path = os.path.join(IMAGES_DIR, img_filename)
-    os.makedirs(DATASET_DIR, exist_ok=True)
+    os.makedirs(ACTIVE_DATA_DIR, exist_ok=True)
     os.makedirs(IMAGES_DIR, exist_ok=True)
-    assert os.path.exists(DATASET_DIR)
+    assert os.path.exists(ACTIVE_DATA_DIR)
     assert os.path.exists(IMAGES_DIR)
     pygame.image.save(screen, img_path)
 

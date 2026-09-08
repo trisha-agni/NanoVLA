@@ -3,10 +3,12 @@ import os
 
 # --- FILE SYSTEM PATHS ---
 ROOT = Path(__file__).resolve().parents[1]
-DATASET_DIR = ROOT / 'manual_dataset'
-IMAGES_DIR = DATASET_DIR / 'images'
+MANUAL_DATA_DIR = ROOT / 'manual_dataset'
+EXPERT_DATA_DIR = ROOT / 'expert_dataset'
+ACTIVE_DATA_DIR = MANUAL_DATA_DIR
+IMAGES_DIR = ACTIVE_DATA_DIR / 'images'
 MANIFEST_FILE = 'manifest.json'
-MANIFEST_PATH = os.path.join(DATASET_DIR, MANIFEST_FILE)
+MANIFEST_PATH = os.path.join(ACTIVE_DATA_DIR, MANIFEST_FILE)
 
 # --- ENVIRONMENT PARAMETERS ---
 GRID_SZ = 10
