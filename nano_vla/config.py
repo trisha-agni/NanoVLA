@@ -3,7 +3,7 @@ import os
 
 # --- FILE SYSTEM PATHS ---
 ROOT = Path(__file__).resolve().parents[1]
-DATASET_DIR = ROOT / 'nanovla_dataset'
+DATASET_DIR = ROOT / 'manual_dataset'
 IMAGES_DIR = DATASET_DIR / 'images'
 MANIFEST_FILE = 'manifest.json'
 MANIFEST_PATH = os.path.join(DATASET_DIR, MANIFEST_FILE)
